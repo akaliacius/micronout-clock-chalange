@@ -1,7 +1,7 @@
 package com.andrius.clock.service;
 
 import com.andrius.clock.service.errors.DuplicateException;
-import com.andrius.clock.service.errors.NonExisitingRegistrationException;
+import com.andrius.clock.service.errors.NonExistingRegistrationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ public class ClockService {
 
     public void deregister(String endpoint){
         if(!dataStorage.removeEndpoint(endpoint)){
-            throw new NonExisitingRegistrationException(endpoint);
+            throw new NonExistingRegistrationException(endpoint);
         }
     }
 

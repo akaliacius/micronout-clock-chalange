@@ -13,10 +13,10 @@ import java.util.Map;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Singleton
-@Requires(classes = {NonExisitingRegistrationException.class, ExceptionHandler.class})
-public class NonExistingRegistrationHandler implements ExceptionHandler<NonExisitingRegistrationException, HttpResponse> {
+@Requires(classes = {NonExistingRegistrationException.class, ExceptionHandler.class})
+public class NonExistingRegistrationHandler implements ExceptionHandler<NonExistingRegistrationException, HttpResponse> {
     @Override
-    public HttpResponse handle(HttpRequest request, NonExisitingRegistrationException exception) {
+    public HttpResponse handle(HttpRequest request, NonExistingRegistrationException exception) {
         return HttpResponse.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("reason", exception.getMessage()));
     }
