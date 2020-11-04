@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
-import java.util.List;
 
 @Singleton
 public class ClockService {
@@ -29,10 +28,6 @@ public class ClockService {
         if(!dataStorage.removeEndpoint(endpoint)){
             throw new NonExisitingRegistrationException(endpoint);
         }
-    }
-
-    public List<String> list(){
-        return dataStorage.listAll();
     }
 
     public void update(int seconds){
