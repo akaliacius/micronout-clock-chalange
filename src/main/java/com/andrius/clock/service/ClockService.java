@@ -18,6 +18,7 @@ public class ClockService {
         this.clockJob = clockJob;
     }
 
+    // that's very simple. we should validate endpoint
     public void register(String endpoint){
         if(!dataStorage.insertEndpoint(endpoint)){
             throw new DuplicateException(endpoint);

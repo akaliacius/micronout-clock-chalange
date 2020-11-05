@@ -1,6 +1,7 @@
 package com.andrius.clock.controller;
 
 import com.andrius.clock.service.ClockService;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 
@@ -14,22 +15,22 @@ public class ClockController {
 
     @Post
     @Produces(MediaType.APPLICATION_JSON)
-    public RegisterRequest register(@Body RegisterRequest request) {
+    public HttpResponse<RegisterRequest> register(@Body RegisterRequest request) {
         clockService.register(request.getUrl());
-        return request;
+        return HttpResponse.created(request);
     }
 
     @Delete
     @Produces(MediaType.APPLICATION_JSON)
-    public RegisterRequest deregister(@Body RegisterRequest request) {
+    public HttpResponse<RegisterRequest> deregister(@Body RegisterRequest request) {
         clockService.deregister(request.getUrl());
-        return request;
+        return HttpResponse.ok(request);
     }
 
     @Put
     @Produces(MediaType.APPLICATION_JSON)
-    public UpdateRequest update(@Body UpdateRequest request) {
+    public HttpResponse<UpdateRequest> update(@Body UpdateRequest request) {
         clockService.update(request.getSeconds());
-        return request;
+        return HttpResponse.ok(request);
     }
 }

@@ -1,11 +1,8 @@
-GET http://localhost:8080/clock
-###
-
 POST http://localhost:8080/clock
 Content-Type: application/json
 
 {
-"url":"https://webhook.site/7cbf90c6-0561-47ce-9f22-51470ef45fc9"
+"url":"	https://webhook.site/5a39dd0d-5ca5-456e-953b-2256a7212a6d"
 }
 
 ###
@@ -13,7 +10,7 @@ DELETE http://localhost:8080/clock
 Content-Type: application/json
 
 {
-  "url":"https://webhook.site/7cbf90c6-0561-47ce-9f22-51470ef45fc9"
+  "url":"https://webhook.site/6de138d2-6c61-42bb-8c7e-ab2e2fbdf43a"
 }
 
 ###
@@ -21,5 +18,5 @@ PUT http://localhost:8080/clock
 Content-Type: application/json
 
 {
-"seconds": "10"
+"seconds": "6"
 }

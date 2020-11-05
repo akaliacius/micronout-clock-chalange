@@ -10,16 +10,20 @@ import java.util.stream.Collectors;
 public class DataStorage {
     private Set<String> endpoints = new HashSet<>();
 
-    public boolean insertEndpoint(String endpoint){
+    boolean insertEndpoint(String endpoint){
         return endpoints.add(endpoint);
     }
 
-    public boolean removeEndpoint(String endpoint){
+    boolean removeEndpoint(String endpoint){
         return endpoints.remove(endpoint);
     }
 
-    public List<String> listAll(){
+    List<String> listAll(){
         return endpoints.stream()
                 .collect(Collectors.toList());
+    }
+
+    void reset(){
+        endpoints.clear();
     }
 }

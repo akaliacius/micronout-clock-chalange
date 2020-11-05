@@ -28,7 +28,7 @@ public class ClockJob {
         frequencySec = seconds;
     }
 
-    // TODO: swallow exceptions just like that is terrible, but lack of time is even worse
+
     // TODO: add logging here
     public void run(){
         Thread thread = new Thread(() -> {
@@ -50,6 +50,7 @@ public class ClockJob {
                         e.printStackTrace();
                     }
                 });
+                // TODO: swallow exceptions just like that is terrible, but lack of time is even worse
                 try {
                     Thread.sleep(frequencySec * 1000);
                 } catch (InterruptedException e) {

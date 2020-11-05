@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 
 public class ClockJobTest {
     private ClockJob testable;
-    private DataStorage storageMock;
 
     @BeforeEach void setup(){
         testable = new ClockJob(mock(DataStorage.class));
