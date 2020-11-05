@@ -7,7 +7,12 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 @Singleton
 public class ClockJob {
@@ -16,6 +21,8 @@ public class ClockJob {
 
     private final DataStorage storage;
     private int frequencySec = MIN;
+
+    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
 
     public ClockJob(DataStorage storage) {
         this.storage = storage;
@@ -33,23 +40,38 @@ public class ClockJob {
     public void run(){
         Thread thread = new Thread(() -> {
             while (true){
-                storage.listAll().forEach(url -> {
+                var results = storage.listAll().stream()
+                        .map(url -> {
+                            HttpRequest request = null;
+                            try {
+                                request = HttpRequest.newBuilder()
+                                        .version(HttpClient.Version.HTTP_2)
+                                        .uri(new URI(url))
+                                        .header("Content-Type", "application/json")
+                                        .POST(HttpRequest.BodyPublishers.ofString(message()))
+                                        .build();
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            }
+
+                            return HttpClient.newBuilder()
+                                    .executor(executor)
+                                    .connectTimeout(Duration.ofMinutes(1))
+                                    .build()
+                                    .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+                        }).collect(Collectors.toList());
+
+                results.forEach(f -> {
                     try {
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .version(HttpClient.Version.HTTP_2)
-                                .uri(new URI(url))
-                                .header("Content-Type", "application/json")
-                                .POST(HttpRequest.BodyPublishers.ofString(message()))
-                                .build();
-                        HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                        System.out.println(f.get());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
                 });
+
                 // TODO: swallow exceptions just like that is terrible, but lack of time is even worse
                 try {
                     Thread.sleep(frequencySec * 1000);
