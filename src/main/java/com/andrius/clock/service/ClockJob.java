@@ -11,18 +11,25 @@ import java.time.LocalDateTime;
 
 @Singleton
 public class ClockJob {
+    public static final int MIN = 5;
+    public static final int MAX = 14_400;
+
     private final DataStorage storage;
-    private int frequencySec = 5;
+    private int frequencySec = MIN;
 
     public ClockJob(DataStorage storage) {
         this.storage = storage;
     }
 
     public void update(int seconds){
+        if(seconds < MIN || seconds > MAX){
+            throw new IllegalArgumentException("frequency must be only between " + MIN + " and " + MAX + " seconds");
+        }
         frequencySec = seconds;
-        System.out.println("updated to " + seconds);
     }
 
+    // TODO: swallow exceptions just like that is terrible, but lack of time is even worse
+    // TODO: add logging here
     public void run(){
         Thread thread = new Thread(() -> {
             while (true){
@@ -42,8 +49,6 @@ public class ClockJob {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    System.out.println(url + message());
                 });
                 try {
                     Thread.sleep(frequencySec * 1000);
